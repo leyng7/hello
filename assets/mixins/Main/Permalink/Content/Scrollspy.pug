@@ -1,5 +1,5 @@
 template(x-if='$data.headings.length > 0')
-  #scrollspy(
+  aside#scrollspy(
     x-data='scrollspy'
     @scroll.window='scrollspy'
     x-transition:enter='transition ease-linear duration-200'
@@ -24,21 +24,18 @@ template(x-if='$data.headings.length > 0')
         .spy(class='overflow-x-hidden overflow-y-scroll max-h-[inherit] w-[calc(theme(spacing.56)+theme(spacing.5))]')
           button.close(
             @click='toggle'
-            class='absolute text-base top-2 right-4 text-h-500 dark:text-h-200 2xl:hidden')
+            class='absolute text-base top-3 right-4 text-h-500 dark:text-h-200 2xl:hidden')
             span.txt(class='text-hidden') 목차 닫기
             i.ico(class='fa-solid fa-xmark')
-          ol.tits(
-            x-ref='spy'
-            class='flex flex-col gap-y-3 max-2xl:p-6 max-2xl:pt-8 max-2xl:pr-14 2xl:px-8')
+          ol.tits(class='flex flex-col gap-y-3 max-2xl:p-6 max-2xl:pt-8 max-2xl:pr-14 2xl:px-8')
             template(x-for='heading in $data.headings' :key='heading.id')
               li.tit(
-                :class='{ "pl-0": heading.tagName === "H2", "pl-4": heading.tagName === "H3" }'
-                class='text-h-400')
+                :class='{ "pl-0": heading.tagName === "H2", "pl-4": heading.tagName === "H3" }')
                 a.link(
                   :href='heading.href'
                   x-text='heading.text'
-                  :class='{ "text-h-600 dark:text-h-200": heading.active }'
-                  class='duration-200 text-h-400 hover:text-h-600 dark:hover:text-h-200')
+                  :class='heading.active ? "text-h-600 dark:text-h-200" : "text-h-400 hover:text-h-600 dark:hover:text-h-200"'
+                  class='duration-200')
 
 script(once='alpine-scrollspy-component').
   document.addEventListener('alpine:init', () => Alpine.data('scrollspy', () => ({

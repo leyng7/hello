@@ -1,62 +1,32 @@
+mixin cover()
+  section.cover(class='flex flex-col items-center')
+    header.header
+      h1.tit(class='h-h min-h-[theme(spacing.h)] flex items-center font-bold text-3xl text-h-800 dark:text-h-200 empty:hidden') [##_cover_title_##]
+    block
+
 mixin coverItem()
   s_cover_item
-    .post&attributes(attributes)
-      block
+    +index('cover_item')&attributes(attributes)
 
-mixin coverImage()
-  s_cover_item_thumbnail
-    a.img(href='[##_cover_item_url_##]')
-      img.thumb(
-        data-src='[##_cover_item_thumbnail_##]'
-        data-sizes='auto'
-        alt=''
-        class='lazyload')&attributes(attributes)
-
-mixin coverDescriptionIfContent()
-  .info&attributes(attributes)
-    .tit
-      a.link(href='[##_cover_item_url_##]') [##_cover_item_title_##]
-    .desc
-      time.date [##_cover_item_simple_date_##]
-      span.delimiter ·
-      a.category(href='[##_cover_item_category_url_##]') [##_cover_item_category_##]
-    .summary [##_cover_item_summary_##]
-
-mixin coverDescriptionIfNotContent()
-  .info&attributes(attributes)
-    .tit
-      a.link(href='[##_cover_item_url_##]') [##_cover_item_title_##]
-    .summary [##_cover_item_summary_##]
-
-mixin coverDescription()
-  s_cover_item_article_info
-    +coverDescriptionIfContent()&attributes(attributes)
-  s_cover_item_not_article_info
-    +coverDescriptionIfNotContent()&attributes(attributes)
-
-mixin coverList(mode)
-  section.cover(
-    data-mode=mode
-    class='flex flex-col items-center')
-    header.header
-      h1.tit(class='flex items-center empty:hidden font-semibold h-48 lg:h-64 text-2xl lg:text-3xl text-h-600 dark:text-h-200') [##_cover_title_##]
-    .posts
+mixin coverList(style)
+  +cover()
+    .posts(data-list-style=style)
       +coverItem()
-        +coverImage()
-        +coverDescription()
 
-mixin coverSlideshow()
-  section.cover(data-mode='slideshow')
-    .slideshow(class='swiper')
-      .posts(class='swiper-wrapper')
+mixin coverSlider(style)
+  +cover()
+    .posts(
+      data-list-style=style
+      class='swiper')
+      .wrap(class='swiper-wrapper')
         +coverItem()(class='swiper-slide')
-          +coverImage()
-          +coverDescription()
       .next(class='swiper-button-next')
       .prev(class='swiper-button-prev')
 
 s_cover_group
-  #covers(class='flex flex-col gap-y-8 lg:gap-y-12')
+  #cover(
+    x-init='$store.header.show = false'
+    class='flex flex-col gap-y-12 lg:gap-y-16')
     s_cover_rep
       s_cover(name='gallery')
         +coverList('gallery')
@@ -66,5 +36,5 @@ s_cover_group
         +coverList('grid')
       s_cover(name='zigzag')
         +coverList('zigzag')
-      s_cover(name='slideshow')
-        +coverSlideshow()
+      s_cover(name='slider')
+        +coverSlider('slider')

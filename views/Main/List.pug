@@ -1,224 +1,51 @@
 s_list
-  #list(data-mode='[##_list_style_##]')
-    header.header(
-      x-data='{ thumb: false }'
-      class='relative flex justify-center items-center border-b border-b-solid border-b-h-300 h-48 mb-12 lg:h-64 lg:mb-16 dark:border-b-h-600')
-      s_list_image
-        .img(
-          x-init='thumb = true'
-          class='absolute right-0 top-0 w-full h-64 before:backdrop-blur before:content-[""] before:absolute before:right-0 before:top-0 before:w-full before:h-64 before:bg-h-900/30 before:z-10')
-          img.thumb(
-            src='[##_list_image_##]'
-            alt=''
-            class='absolute right-0 top-0 w-full h-64 z-0 object-cover')
-      .info(
-        :class='thumb? "text-h-200" : "text-h-800"'
-        class='max-w-[80%] flex flex-col items-center z-20 relative text-center dark:text-h-200')
-        h1.tit(class='font-semibold text-2xl lg:text-3xl') [##_list_conform_##]
-        span.desc(class='leading-relaxed mt-2 empty:mt-0') [##_list_description_##]
-    .posts(x-ref='list')
-      s_list_rep
-        +index('list')
+  #list(
+    x-data='{ listStyle: "[##_list_style_##]" }'
+    x-init='$store.header.title = "[##_list_conform_##]"'
+    :data-list-style='listStyle')
+    s_list_rep
+      +index('list_rep')
+    s_list_empty
+      #empty(
+        x-init='listStyle = "empty"'
+        class='rounded-sm text-center p-6 text-h-800 dark:text-h-200 bg-h-200 dark:bg-h-700')
+        .txt(class='font-bold') 게시글을 찾을 수 없습니다.
+        .desc 검색어를 다시 입력하거나 다른 카테고리로 이동해보세요.
 
 style
   :postcss
-    [data-mode=gallery],
-    [data-mode=list],
-    [data-mode=grid],
-    [data-mode=zigzag] {
-      .posts {
-        @apply w-full px-4 lg:px-0 lg:w-idx lg:mx-auto;
+    #tt-body-index,
+    #tt-body-category,
+    #tt-body-tag,
+    #tt-body-search {
+      #global-header ~ .post,
+      [data-list-style=empty],
+      [data-list-style=gallery],
+      [data-list-style=list],
+      [data-list-style=grid],
+      [data-list-style=zigzag] {
+        @apply w-full px-4 lg:px-0 lg:mx-auto lg:w-idx;
       }
-    }
 
-    [data-mode=slideshow] {
-      .posts {
+      [data-list-style=slider] {
         @apply w-full h-screen;
       }
-    }
 
-style
-  :postcss
-    [data-mode=gallery] {
-      .posts {
-        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+      [data-list-style=grid],
+      [data-list-style=gallery] {
+        @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3;
       }
 
-      .post {
-        @apply before:opacity-0 before:absolute before:right-0 before:top-0 before:w-full before:h-full before:z-10 before:bg-gradient-to-b before:from-transparent before:to-h-700/60;
-        @apply hover:before:opacity-100 hover:before:duration-300;
-        @apply relative w-full flex;
-
-        .img {
-          @apply pt-[100%] relative w-full h-full;
-
-          .thumb {
-            @apply absolute top-0 left-0 w-full h-full;
-          }
-        }
-
-        .info {
-          @apply opacity-0 pb-12 absolute w-full h-full flex flex-col justify-end items-center gap-y-0.5 text-center z-20;
-          @apply hover:opacity-100 hover:duration-300;
-
-          .tit {
-            @apply px-6;
-
-            .link {
-              @apply text-h-200 text-xl font-bold;
-            }
-          }
-
-          .desc {
-            .date,
-            .delimiter,
-            .category {
-              @apply text-h-200;
-            }
-          }
-
-          .summary {
-            @apply hidden;
-          }
-        }
+      [data-list-style=grid] {
+        @apply gap-4 lg:gap-8;
       }
-    }
 
-style
-  :postcss
-    [data-mode=list] {
-      .posts {
+      [data-list-style=gallery] {
+        @apply gap-2;
+      }
+
+      [data-list-style=list],
+      [data-list-style=zigzag] {
         @apply flex flex-col gap-y-6 sm:gap-y-0;
-      }
-
-      .post {
-        @apply flex flex-col gap-y-4;
-        @apply sm:flex-row-reverse sm:items-center sm:justify-end sm:gap-x-8 sm:h-72;
-        @apply sm:border-t sm:border-solid sm:border-h-300 sm:dark:border-h-600 sm:first:border-t-0;
-
-        .img {
-          .thumb {
-            @apply w-full sm:w-64 sm:h-64 max-w-none;
-          }
-        }
-
-        .info {
-          @apply gap-y-1 sm:grow;
-
-          .tit {
-            @apply text-xl lg:text-2xl font-bold;
-          }
-
-          .summary {
-            @apply mt-2 max-h-20;
-          }
-        }
-      }
-    }
-
-style
-  :postcss
-    [data-mode=grid] {
-      .posts {
-        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
-        @apply gap-6 md:gap-x-8 md:gap-y-12;
-      }
-
-      .post {
-        @apply flex flex-col gap-y-4;
-
-        .img {
-          @apply pt-[66.66%] relative;
-
-          .thumb {
-            @apply absolute top-0 left-0 w-full h-full;
-          }
-        }
-
-        .info {
-          @apply gap-y-1;
-
-          .tit {
-            @apply text-xl font-bold;
-          }
-
-          .summary {
-            @apply mt-2 max-h-14;
-          }
-        }
-      }
-    }
-
-style
-  :postcss
-    [data-mode=zigzag] {
-      .posts {
-        @apply flex flex-col gap-y-6 lg:gap-y-12;
-      }
-
-      .post {
-        @apply relative flex flex-col gap-y-4 lg:gap-x-8 lg:flex-row;
-
-        .img {
-          .thumb {
-            @apply relative z-10 object-cover w-full lg:max-w-none;
-            @apply lg:w-96 lg:h-72;
-          }
-        }
-
-        .info {
-          @apply gap-y-1 justify-center;
-
-          .tit {
-            @apply text-xl lg:text-2xl font-bold;
-          }
-
-          .summary {
-            @apply mt-2 max-h-20;
-          }
-        }
-
-        &:nth-child(2n) {
-          @apply lg:flex-row-reverse;
-        }
-      }
-    }
-
-style
-  :postcss
-    [data-mode=slideshow] {
-      .post {
-        @apply before:absolute before:right-0 before:top-0 before:w-full before:h-screen before:bg-h-900/20 before:z-10;
-        @apply flex justify-center items-center;
-
-        .img {
-          .thumb {
-            @apply w-screen h-screen object-cover;
-          }
-        }
-
-        .info {
-          @apply absolute w-screen h-screen flex flex-col justify-center items-center gap-y-1 text-center z-20;
-
-          .tit {
-            @apply px-4;
-
-            .link {
-              @apply text-h-200 text-3xl font-bold;
-            }
-          }
-
-          .desc {
-            .date,
-            .delimiter,
-            .category {
-              @apply text-h-200;
-            }
-          }
-
-          .summary {
-            @apply hidden;
-          }
-        }
       }
     }

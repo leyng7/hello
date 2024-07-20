@@ -2,7 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./app.pug', './index.pug', './views/**/*.pug'],
+  content: ['./app.pug', './index.pug', './views/**/*.pug', './assets/**/*.pug'],
   darkMode: 'class',
   theme: {
     screens: {
@@ -34,7 +34,8 @@ module.exports = {
         idx: 'var(--h-idx)',
         pem: 'var(--h-pem)',
         s: 'var(--h-s)',
-        c: 'var(--h-c)'
+        c: 'var(--h-c)',
+        h: 'var(--h-h)'
       },
       fontSize: {
         xxs: '0.625rem'
