@@ -9,15 +9,36 @@
   }
 }
 
-@layer utilities {
-  .text-hidden {
-    @apply absolute w-px h-px -m-px overflow-hidden !important;
+@layer components {
+  .index-container {
+    @apply w-full px-4 lg:px-0 lg:mx-auto lg:w-idx;
   }
 
-  .text-overflow-hidden {
-    @apply overflow-hidden whitespace-nowrap text-ellipsis;
+  .permalink-container {
+    @apply w-full px-4 lg:px-0 lg:max-w-screen-lg lg:w-pem lg:mx-auto;
   }
 
+  .cover-cols-1 {
+    @apply grid grid-cols-1;
+  }
+
+  .cover-cols-2 {
+    @apply cover-cols-1 sm:grid-cols-2;
+  }
+
+  .cover-cols-3 {
+    @apply cover-cols-2 md:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .cover-button {
+    @apply flex;
+  }
+
+  .cover-fullscreen {
+    @apply w-full h-screen;
+  }
+
+  /* https://fontawesome.com/ */
   .font-awesome {
     @apply font-['Font_Awesome_6_Free'] leading-none not-italic inline-block;
   }
@@ -80,5 +101,41 @@
 
   .fa-triangle-exclamation {
     @apply font-awesome font-bold content-['\f071'];
+  }
+
+  .fa-xmark {
+    @apply font-awesome font-bold content-['\f00d'];
+  }
+
+  .fa-ellipsis-vertical {
+    @apply font-awesome font-bold content-['\f142'];
+  }
+
+  .fa-thumbtack {
+    @apply font-awesome font-bold content-['\f08d'];
+  }
+}
+
+@layer utilities {
+  .text-hidden {
+    @apply absolute w-px h-px -m-px overflow-hidden !important;
+  }
+
+  .text-overflow-hidden {
+    @apply overflow-hidden whitespace-nowrap text-ellipsis;
+  }
+
+  /* https://github.com/aFarkas/lazysizes#css-api */
+  .lazyload,
+  .lazyloading {
+    @apply animate-pulse bg-h-300 dark:bg-h-700;
+  }
+
+  .lazyload:not([src]) {
+    @apply invisible;
+  }
+
+  .lazyloaded {
+    @apply animate-none bg-h-100;
   }
 }

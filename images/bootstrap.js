@@ -20,18 +20,6 @@ class DarkMode {
   }
 
   /**
-   * Preferred
-   *
-   * @return {boolean}
-   */
-  preferred () {
-    const os = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    const theme = localStorage.getItem(this.key) || os
-
-    return theme === 'dark'
-  }
-
-  /**
    * Toggle
    */
   toggle () {
@@ -47,6 +35,18 @@ class DarkMode {
   get on () {
     return document.documentElement.classList.contains(this.class)
   }
+
+  /**
+   * Preferred
+   *
+   * @return {boolean}
+   */
+  get preferred () {
+    const os = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const theme = localStorage.getItem(this.key) || os
+
+    return theme === 'dark'
+  }
 }
 
 /**
@@ -54,7 +54,7 @@ class DarkMode {
  */
 const darkMode = new DarkMode()
 
-darkMode.preferred() && darkMode.toggle()
+darkMode.preferred && darkMode.toggle()
 
 /**
  * Console Issues
@@ -66,4 +66,6 @@ darkMode.preferred() && darkMode.toggle()
  */
 // eslint-disable-next-line no-unused-vars
 /* global tjQuery: readonly, $: writable */
-window.jQuery = $ = tjQuery
+if (Object.hasOwn(window, 'tjQuery')) {
+  window.jQuery = $ = tjQuery
+}

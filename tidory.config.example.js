@@ -1,3 +1,5 @@
+const ESLintPlugin = require('eslint-webpack-plugin')
+
 /**
  * Tidory Configuration
  * @see https://tidory.github.io/docs/configuration/
@@ -44,15 +46,14 @@ module.exports = {
      * Variables
      */
     variableSettings: {
-      sidebar: true,
+      sidebar: false,
       'foldable-category': true,
-      'foldable-reply': true,
       width: '720',
       toc: true,
       scrollspy: true,
       hljs: 'xcode',
-      hljsDark: 'vs2015',
-      mode: 'simple'
+      'hljs-dark': 'vs2015',
+      'header-style': 'simple'
     },
 
     /**
@@ -60,10 +61,10 @@ module.exports = {
      */
     coverSettings: [
       {
-        description: '슬라이드쇼',
+        description: '슬라이더',
         index: 0,
-        name: 'slideshow',
-        title: '슬라이드쇼',
+        name: 'slider',
+        title: '슬라이더',
         dataType: 'RECENT',
         data: {
           category: 'ALL',
@@ -93,10 +94,10 @@ module.exports = {
         }
       },
       {
-        description: '지그재그',
+        description: 'Z',
         index: 0,
-        name: 'zigzag',
-        title: '지그재그',
+        name: 'Z',
+        title: 'Z',
         dataType: 'RECENT',
         data: {
           category: 'ALL',
@@ -117,14 +118,9 @@ module.exports = {
    * @param {object} webpackConfig
    */
   extends (webpackConfig) {
-    webpackConfig.module.rules = [
-      {
-        enforce: 'pre',
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader'
-      },
-      ...webpackConfig.module.rules
+    webpackConfig.plugins = [
+      new ESLintPlugin({ configType: 'flat' }),
+      ...webpackConfig.plugins
     ]
 
     webpackConfig.entry = Object.assign(webpackConfig.entry, {

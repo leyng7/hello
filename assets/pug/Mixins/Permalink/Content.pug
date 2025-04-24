@@ -1,0 +1,228 @@
+#content(
+  x-data='content'
+  class='permalink-container relative')
+  s_if_var_toc
+    include Content/TOC
+  include Content/Article
+  s_if_var_scrollspy
+    include Content/Scrollspy
+
+script(once='alpine-article-component').
+  document.addEventListener('alpine:init', () => Alpine.data('content', () => ({
+    /**
+     * Support Headings
+     *
+     * @property {array} headings
+     */
+    supportHeadings: '.contents_style > h2, .contents_style > h3',
+
+    /**
+     * Headings
+     *
+     * @property {array} headings
+     */
+    headings: [],
+
+    /**
+     * Init 'content' Component
+     */
+    init () {
+      this.setAnchorToHeadings()
+      this.collectHeading()
+      this.highlightCodeBlocks()
+      this.addBlankHashToMoreLesses()
+      this.setPositionToImages()
+    },
+
+    /**
+     * Add blank hash To morelesses
+     */
+    addBlankHashToMoreLesses () {
+      this.$article.querySelectorAll('a.btn-toggle-moreless').forEach($moreless => {
+        $moreless.setAttribute('href', '#')
+      })
+    },
+
+    /**
+     * Syntax highlighting code blocks in template
+     */
+    highlightCodeBlocks () {
+      this.$article.querySelectorAll('pre code').forEach(hljs.highlightElement)
+    },
+
+    /**
+     * Collect heading in template
+     */
+    collectHeading () {
+      this.$headings.forEach($heading => {
+        const heading = this.heading($heading)
+
+        this.headings.push(heading)
+      })
+    },
+
+    /**
+     * Get new Scrollspy item
+     *
+     * @param {HTMLElement} $heading
+     *
+     * @return {object}
+     */
+    heading ($heading) {
+      return {
+        tagName: $heading.tagName,
+        id: $heading.id,
+        href: `#${$heading.id}`,
+        text: $heading.textContent,
+        active: false
+      }
+    },
+
+    /**
+     * Set position to images
+     */
+    setPositionToImages () {
+      this.$article.querySelectorAll('figure.imageblock').forEach(this.setImageBlockPosition.bind(this))
+      this.$article.querySelectorAll('figure.imagegridblock').forEach(this.setImageGridBlockPosition.bind(this))
+    },
+
+    /**
+     * Set image block position
+     *
+     * @param {HTMLElement} $imageBlock
+     */
+    setImageBlockPosition ($imageBlock) {
+      const width = this.imageBlockWidth($imageBlock)
+
+      if ($imageBlock.classList.contains('alignCenter')) {
+        this.setImageBlockToCenter($imageBlock)
+      }
+
+      if ($imageBlock.classList.contains('widthContent')) {
+        return
+      }
+
+      this.setImageBlockWidth($imageBlock, width)
+    },
+
+    /**
+     * Set image grid block position
+     *
+     * @param {HTMLElement} $imageBlock
+     */
+    setImageGridBlockPosition ($imageBlock) {
+      const width = this.imageGridBlockWidth()
+
+      this.setImageBlockToCenter($imageBlock)
+      this.setImageBlockWidth($imageBlock, width)
+    },
+
+    /**
+     * Center image block
+     *
+     * @param {HTMLElement} $imageBlock
+     */
+    imageBlockWidth ($imageBlock) {
+      const $imageWrap = $imageBlock.querySelector('span, a')
+      const $image = $imageWrap.querySelector('img')
+      const width = $image.getAttribute('width') || $imageBlock.dataset.originWidth
+
+      return width > 1100 ? 1100 : width
+    },
+
+    /**
+     * Center image grid block
+     */
+    imageGridBlockWidth () {
+      return 1100
+    },
+
+    /**
+     * set Image Width
+     *
+     * @param {HTMLElement} $imageBlock
+     * @param {String|Number} width
+     */
+    setImageBlockWidth ($imageBlock, width) {
+      $imageBlock.style.width = `${width}px`
+      $imageBlock.style.maxWidth = `${width}px`
+    },
+
+    /**
+     * set Image block to center
+     *
+     * @param {HTMLElement} $imageBlock
+     */
+    setImageBlockToCenter ($imageBlock) {
+      $imageBlock.style.marginLeft = '50%'
+      $imageBlock.style.transform = 'translateX(-50%)'
+    },
+
+    /**
+     * Set anchor to headings in template
+     */
+    setAnchorToHeadings () {
+      this.$headings.forEach(this.setAnchorToHeading.bind(this))
+    },
+
+    /**
+     * Set anchor to heading
+     *
+     * @param {HTMLElement} $heading
+     * @param {number} index
+     */
+    setAnchorToHeading ($heading, index) {
+      const link = this.link($heading, index)
+      const $anchor = this.$anchor($heading, `#${link}`)
+
+      $heading.setAttribute('id', link)
+      $heading.innerHTML = $anchor.outerHTML
+    },
+
+    /**
+     * Get link for heading
+     *
+     * @param {HTMLElement} $heading
+     * @param {number} index
+     *
+     * @return {string}
+     */
+    link ($heading, index) {
+      return this.$id(encodeURIComponent($heading.textContent), index)
+    },
+
+    /**
+     * Get new anchor
+     *
+     * @param {HTMLElement} $heading
+     * @param {string} link
+     *
+     * @return {HTMLElement}
+     */
+    $anchor ($heading, link) {
+      const $anchor = document.createElement('a')
+
+      $anchor.setAttribute('href', link)
+      $anchor.textContent = $heading.textContent
+
+      return $anchor
+    },
+
+    /**
+     * Get article template content
+     *
+     * @return {HTMLElement}
+     */
+    get $article () {
+      return this.$refs.article
+    },
+
+    /**
+     * Get headings in content
+     *
+     * @return {NodeListOf<HTMLElement>}
+     */
+    get $headings () {
+      return this.$article.querySelectorAll(this.supportHeadings)
+    }
+  })))

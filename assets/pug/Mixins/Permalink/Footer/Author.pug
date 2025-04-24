@@ -1,0 +1,17 @@
+#author(class='border-t border-b border-h-300 dark:border-h-600 mt-6 py-8 flex gap-x-5 items-center')
+  img.thumb(
+    data-src='[##_image_##]'
+    data-sizes='auto'
+    width='80'
+    height='80'
+    alt='[##_blogger_##]'
+    class='lazyload rounded-full object-cover w-20 h-20')
+  .profile(class='flex flex-col gap-y-1')
+    .blogger(class='text-h-800 dark:text-h-200 font-bold') [##_blogger_##]
+    .desc(class='leading-7 text-sm text-h-400') [##_desc_##]
+
+style(once='namecard')
+  :postcss
+    div[data-tistory-react-app=Namecard] {
+      @apply hidden;
+    }

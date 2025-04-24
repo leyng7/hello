@@ -1,0 +1,57 @@
+mixin index(type, hasCategory=true, options={})
+  -
+    const defaultOptions = {
+      link: true,
+      picture: true,
+      thumbnail: true,
+      fallback: true,
+      header: true,
+      title: true,
+      description: true,
+      summary: true
+    }
+  -options = { ...defaultOptions, ...options }
+
+  .post&attributes(attributes)
+    if options.link
+      a.link(
+        href=`[##_${type}_${type === 'list_rep' || type === 'notice_rep' ? 'link' : 'url'}_##]`)
+    .content
+      if options.picture
+        .picture
+          if options.thumbnail
+            #{`s_${type}_thumbnail`}
+              .img
+                img.thumb(
+                  data-src=`[##_${type}_thumbnail${type === 'notice_rep' ? '_url' : '' }_##]`
+                  data-sizes='auto'
+                  alt=''
+                  class='lazyload')
+          if options.fallback
+            .fallback
+      .info
+        if options.header
+          .header
+            if options.title
+              .tit #{`[##_${type}_title_##]`}
+            if options.description
+              case type
+                when 'notice_rep'
+                when 'list_rep'
+                  +description(type, hasCategory)
+                when 'cover_item'
+                  s_cover_item_article_info
+                    +description(type, hasCategory)
+        if options.summary
+          .summary #{`[##_${type}_summary_##]`}
+
+mixin description(type, hasCategory)
+  .desc
+    time.date #{`[##_${type}_${type === 'list_rep' ? 'regdate' : 'simple_date'}_##]`}
+    span.delimiter ·
+    unless hasCategory
+      case type
+        when 'notice_rep'
+          .category 공지사항
+    else
+      .category #{`[##_${type}_category_##]`}

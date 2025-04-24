@@ -1,0 +1,30 @@
+if process.env.NODE_ENV === 'development'
+  template(x-teleport='#article .container_postbtn')
+    button.btn_menu_toolbar.btn_subscription(
+      type='button'
+      class='#subscribe'
+      data-blog-id='3751118'
+      data-url='https://pronist.tistory.com/5'
+      data-device='web_pc')
+      em.txt_state 구독하기
+      strong.txt_tool_id hELLO.
+      span.img_common_tistory.ico_check_type1
+
+style(once='content-subscription-button')
+  :postcss
+    #article {
+      .container_postbtn {
+        .btn_subscription {
+          @apply before:fa-star before:font-bold before:text-sm;
+
+          .txt_state {
+            @apply text-hidden;
+          }
+
+          .txt_tool_id,
+          .ico_check_type1 {
+            @apply hidden;
+          }
+        }
+      }
+    }

@@ -1,51 +1,9 @@
 s_list
-  #list(
+  section#list(
     x-data='{ listStyle: "[##_list_style_##]" }'
     x-init='$store.header.title = "[##_list_conform_##]"'
     :data-list-style='listStyle')
     s_list_rep
       +index('list_rep')
     s_list_empty
-      #empty(
-        x-init='listStyle = "empty"'
-        class='rounded-sm text-center p-6 text-h-800 dark:text-h-200 bg-h-200 dark:bg-h-700')
-        .txt(class='font-bold') 게시글을 찾을 수 없습니다.
-        .desc 검색어를 다시 입력하거나 다른 카테고리로 이동해보세요.
-
-style
-  :postcss
-    #tt-body-index,
-    #tt-body-category,
-    #tt-body-tag,
-    #tt-body-search {
-      #global-header ~ .post,
-      [data-list-style=empty],
-      [data-list-style=gallery],
-      [data-list-style=list],
-      [data-list-style=grid],
-      [data-list-style=zigzag] {
-        @apply w-full px-4 lg:px-0 lg:mx-auto lg:w-idx;
-      }
-
-      [data-list-style=slider] {
-        @apply w-full h-screen;
-      }
-
-      [data-list-style=grid],
-      [data-list-style=gallery] {
-        @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3;
-      }
-
-      [data-list-style=grid] {
-        @apply gap-4 lg:gap-8;
-      }
-
-      [data-list-style=gallery] {
-        @apply gap-2;
-      }
-
-      [data-list-style=list],
-      [data-list-style=zigzag] {
-        @apply flex flex-col gap-y-6 sm:gap-y-0;
-      }
-    }
+      include List/Empty

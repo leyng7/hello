@@ -38,7 +38,7 @@ html#hELLO(
 
     style
       include:postcss @/css/app.css
-      include:postcss @/css/vendor.css
+      include:postcss @/css/shortcutLayer.css
 
     script(fixed).
       /**
@@ -50,13 +50,12 @@ html#hELLO(
       window.skinOptions = {
         sidebar: '[##_var_sidebar_##]',
         foldableCategory: '[##_var_foldable-category_##]',
-        foldableReply: '[##_var_foldable-reply_##]',
         width: '[##_var_width_##]',
         toc: '[##_var_toc_##]',
         scrollspy: '[##_var_scrollspy_##]',
         hljs: '[##_var_hljs_##]',
         hljsDark: '[##_var_hljs-dark_##]',
-        mode: '[##_var_mode_##]'
+        headerStyle: '[##_var_header-style_##]'
       }
 
   body(
@@ -81,9 +80,6 @@ html#hELLO(
          */
         init () {
           this.loaded()
-
-          /** @see https://dequeuniversity.com/rules/axe/4.9/frame-title */
-          this.setTitleToEditEntryFrame()
         },
 
         /**
@@ -91,13 +87,6 @@ html#hELLO(
          */
         loaded () {
           setTimeout(() => this.loading = false, 100)
-        },
-
-        /**
-         * Set title to edit entry frame
-         */
-        setTitleToEditEntryFrame () {
-          document.getElementById("editEntry").title = "Edit Entry"
         }
       })))
 
